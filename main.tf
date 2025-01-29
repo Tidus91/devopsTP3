@@ -30,9 +30,3 @@ resource "google_artifact_registry_repository" "node_repo" {
 }
 
 
-# 🔹 Donner les permissions à Cloud Build pour déployer sur Cloud Run
-resource "google_project_iam_member" "cloud_build_run" {
-  project = var.project_id
-  role    = "roles/run.admin"
-  member  = "serviceAccount:${var.project_id}@cloudbuild.gserviceaccount.com"
-}
