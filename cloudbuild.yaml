@@ -15,14 +15,14 @@ steps:
   args:
     - "build"
     - "-t"
-    - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/node-app-repo/node-app:latest"
+    - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/repo-tp3/node-app:latest"
     - "."
 
 - id: "Push Docker Image"
   name: "gcr.io/cloud-builders/docker"
   args:
     - "push"
-    - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/node-app-repo/node-app:latest"
+    - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/repo-tp3/node-app:latest"
 
 # 3️⃣ (Bonus) Déployer l’image Docker sur Cloud Run
 - id: "Deploy to Cloud Run"
@@ -32,7 +32,7 @@ steps:
     - "run"
     - "deploy"
     - "node-app"
-    - "--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/node-app-repo/node-app:latest"
+    - "--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/repo-tp3/node-app:latest"
     - "--platform=managed"
     - "--region=${_REGION}"
     - "--allow-unauthenticated"
