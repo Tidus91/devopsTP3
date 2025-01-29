@@ -27,6 +27,10 @@ resource "google_artifact_registry_repository" "node_repo" {
   location      = var.region
   repository_id = "repo-tp3"
   format        = "DOCKER"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 
