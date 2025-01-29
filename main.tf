@@ -3,13 +3,9 @@ provider "google" {
   region  = var.region
 }
 
-variable "project_id" {}
-variable "region" {
-  default = "us-central1"
-}
 
 resource "google_artifact_registry_repository" "repo" {
-  name     = "my-repo"
+  name     = "TP3test"
   format   = "DOCKER"
   location = var.region
 }
