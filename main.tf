@@ -27,6 +27,8 @@ resource "google_artifact_registry_repository" "node_repo" {
   location      = var.region
   repository_id = "node-app-repo"
   format        = "DOCKER"
+
+  depends_on = [google_project_service.artifactregistry]
 }
 
 # 🔹 (Bonus) Déployer l’application sur Cloud Run
