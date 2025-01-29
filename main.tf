@@ -9,6 +9,7 @@ terraform {
   backend "gcs" {
     bucket = "testtp3"
     prefix = "terraform/state"
+  }
 }
 
 provider "google" {
