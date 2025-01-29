@@ -22,6 +22,13 @@ resource "google_project_service" "enable_services" {
   service = each.key
 }
 
+
+resource "google_project_service" "run" {
+  service = "run.googleapis.com"
+}
+
+
+
 resource "google_project_service" "artifactregistry" {
   service = "artifactregistry.googleapis.com"
 }
@@ -57,6 +64,8 @@ resource "google_cloud_run_service" "node_app" {
     percent         = 100
     latest_revision = true
   }
+
+  depends_on = [google_project_service.run]
 }
 
 # 🔹 Donner les permissions à Cloud Build pour déployer sur Cloud Run
