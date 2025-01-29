@@ -25,7 +25,7 @@ resource "google_project_service" "enable_services" {
 # 🔹 Créer un repository Artifact Registry pour stocker l’image Docker
 resource "google_artifact_registry_repository" "node_repo" {
   location      = var.region
-  repository_id = "repoTP3"
+  repository_id = "repo-tp3"
   format        = "DOCKER"
 }
 
