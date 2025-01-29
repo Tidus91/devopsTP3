@@ -1,0 +1,44 @@
+steps:
+# 1️⃣ Appliquer Terraform
+- id: "Terraform Init & Apply"
+  name: "hashicorp/terraform:1.0.0"
+  entrypoint: "sh"
+  args:
+    - "-c"
+    - |
+        terraform init
+        terraform apply -auto-approve
+
+# 2️⃣ Construire et pousser l’image Docker dans Artifact Registry
+- id: "Build Docker Image"
+  name: "gcr.io/cloud-builders/docker"
+  args:
+    - "build"
+    - "-t"
+    - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/node-app-repo/node-app:latest"
+    - "."
+
+- id: "Push Docker Image"
+  name: "gcr.io/cloud-builders/docker"
+  args:
+    - "push"
+    - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/node-app-repo/node-app:latest"
+
+# 3️⃣ (Bonus) Déployer l’image Docker sur Cloud Run
+- id: "Deploy to Cloud Run"
+  name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+  entrypoint: "gcloud"
+  args:
+    - "run"
+    - "deploy"
+    - "node-app"
+    - "--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/node-app-repo/node-app:latest"
+    - "--platform=managed"
+    - "--region=${_REGION}"
+    - "--allow-unauthenticated"
+
+substitutions:
+  _REGION: "us-central1"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
