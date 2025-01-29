@@ -3,42 +3,30 @@ provider "google" {
   region  = var.region
 }
 
-resource "google_project_service" "run" {
-  service = "run.googleapis.com"
+variable "project_id" {}
+variable "region" {
+  default = "us-central1"
 }
 
-resource "google_project_service" "artifactregistry" {
-  service = "artifactregistry.googleapis.com"
-}
-
-resource "google_artifact_registry_repository" "my-repo" {
-  location      = var.region
-  repository_id = "my-nodejs-repo"
-  format        = "DOCKER"
-
-  depends_on = [google_project_service.artifactregistry]
-}
-
-resource "google_cloud_run_service" "my-service" {
-  name     = "my-nodejs-app"
+resource "google_artifact_registry_repository" "repo" {
+  name     = "my-repo"
+  format   = "DOCKER"
   location = var.region
-
-  template {
-    spec {
-      containers {
-        image = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.my-repo.repository_id}/my-nodejs-app:latest"
-      }
-    }
-  }
-
-  traffic {
-    percent         = 100
-    latest_revision = true
-  }
-
-  depends_on = [google_project_service.run]
 }
 
-output "cloud_run_url" {
-  value = google_cloud_run_service.my-service.status[0].url
+
+
+resource "google_cloud_run_service_iam_policy" "allow_all" {
+  location = google_cloud_run_service.node_app.location
+  service  = google_cloud_run_service.node_app.name
+  policy_data = <<EOF
+{
+  "bindings": [
+    {
+      "role": "roles/run.invoker",
+      "members": ["allUsers"]
+    }
+  ]
+}
+EOF
 }
