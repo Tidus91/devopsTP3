@@ -22,6 +22,12 @@ resource "google_project_service" "enable_services" {
   service = each.key
 }
 
+resource "google_project_service" "artifactregistry" {
+  service = "artifactregistry.googleapis.com"
+}
+
+
+
 # 🔹 Créer un repository Artifact Registry pour stocker l’image Docker
 resource "google_artifact_registry_repository" "node_repo" {
   location      = var.region
